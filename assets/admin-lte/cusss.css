@@ -1,0 +1,7 @@
+div.box-body img {
+    /* width: 100%; */
+    /* background: center; */
+    /* background-size: cover; */
+    object-position: center;
+    height: 150px;
+}
