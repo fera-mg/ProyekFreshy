@@ -171,6 +171,9 @@ class Cart extends CI_Controller {
                 'satuan'=> $data->satuan
             );
             $this->db->insert('tb_d_invoice', $invdetail);
+
+            // update stok
+            
         }
 
         if($this->db->delete('tb_cart', array('user_id' => $res[0]->id))){

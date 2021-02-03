@@ -65,10 +65,20 @@
                             <td>
                                 <?php 
                                 if ($data->bukti != null){
+                                  if($data->status_bayar == 1 ) { 
+                                ?>
+                                <a href="<?= base_url('cart/act_valid_adm?id='.$data->id.'&s=1&u=adm') ?>" class="btn btn-primary btn-sm">Valid</a>
+                                <?php
+                                  } elseif($data->status_bayar == 2 ) { 
+                                ?>
+                                <a href="<?= base_url('cart/act_valid_adm?id='.$data->id.'&s=2&u=adm') ?>" class="btn btn-warning btn-sm">Tidak Valid</a>
+                                <?php
+                                  } else { 
                                 ?>
                                 <a href="<?= base_url('cart/act_valid_adm?id='.$data->id.'&s=1&u=adm') ?>" class="btn btn-primary btn-sm">Valid</a>
                                 <a href="<?= base_url('cart/act_valid_adm?id='.$data->id.'&s=2&u=adm') ?>" class="btn btn-warning btn-sm">Tidak Valid</a>
                                 <?php
+                                  }
                                 } 
                                 ?>
                                 

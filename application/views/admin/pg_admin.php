@@ -185,6 +185,13 @@
                   <div class="box-body text-center">
                     <img src="<?= base_url('uploads/product/'.$data->gambar) ?>">
                     <h4><?=rupiah($data->harga)?></h4>
+                    <p>Stok <?php if($data->stok < 5){
+                      echo "< 5";
+                    } elseif ($data->stok == 0 ){
+                      echo "Habis";
+                    } else {
+                      echo  $data->stok;
+                    }?></p>
                     <a class="btn btn-block btn-primary btn-sm" href="<?=base_url('cart/add?id=').$data->id?>">Tambah</a>
                     <!-- <h5>h5. Bootstrap heading</h5>
                     <h6>h6. Bootstrap heading</h6> -->

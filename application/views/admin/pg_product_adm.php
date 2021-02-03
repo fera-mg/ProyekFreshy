@@ -24,6 +24,7 @@
                             <th>ID</th>
                             <th>Nama Barang</th>
                             <th>Harga</th>
+                            <th>Stok</th>
                             <th>Action</th>
                         </tr>
                         <?php 
@@ -37,6 +38,7 @@
                             <td><?= $data->id ?></td>
                             <td><?= $data->nama_produk ?></td>
                             <td><?= rupiah($data->harga) ?></td>
+                            <td><?= $data->stok ?></td>
                             <td>
                                 <a href="<?= base_url('product/edit?id='.$data->id) ?>" class="btn btn-primary btn-sm">Ubah</a>
                                 <a href="<?= base_url('product/delete?id='.$data->id) ?>" class="btn btn-danger btn-sm">Hapus</a>
