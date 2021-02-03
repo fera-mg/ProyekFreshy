@@ -4,18 +4,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Cart extends CI_Controller {
 
     function __construct() {
-		parent::__construct();
+        parent::__construct();
+        $this->check_expired();
 		if(!$this->session->has_userdata("status")){
 			redirect(base_url());
 		}
     }
 
-    // public function check_login(){
-    //     $id = $this->session->userdata("role");
-    //     if($id==1){
-    //         redirect(base_url('user'));
-    //     }
-    // }
+    private function check_expired(){
+        // cek jatuh tempo
+        $resInvoice = $this->db->get('tb_invoice')->result();
+        foreach ($resInvoice as $data){
+            $date2 = strtotime($data->tanggal. ' + 2 days');
+            $date_diff=($date2-strtotime(date("Y-m-d"))) / 86400;
+            if($date_diff < 0 && $data->bukti == null){
+                $res = $this->db->get_where('tb_d_invoice',array('invoice_id'=>$data->id))->result();
+                foreach ($res as $value){
+                    $this->tambahStock($value->produk_id,$value->satuan);
+                }
+                $this->db->delete('tb_d_invoice',array('invoice_id'=>$data->id));
+            }
+        }
+    }
 	/**
 	 * Index Page for this controller.
 	 *
@@ -199,6 +209,18 @@ class Cart extends CI_Controller {
         return $this->db->update('tb_produk', $data);
     }
 
+    private function tambahStock($id, $jml){
+        $res = $this->db->get_where('tb_produk',array('id' => $id))->result();
+        $data = array(
+            'stok' => $res[0]->stok+$jml
+        );
+        $where = array(
+            'id' => $id
+        );
+        $this->db->where($where);
+        return $this->db->update('tb_produk', $data);
+    }
+
     public function invoice(){
         $data['page'] = 'invoice';
         $where = array(
@@ -208,6 +230,7 @@ class Cart extends CI_Controller {
         $where = array(
             'user_id' => $res[0]->id
         );
+        $this->db->order_by('tanggal', 'ASC');
         $res = $this->db->get_where('tb_invoice',$where)->result();
 
         // print_r($res);
@@ -371,6 +394,19 @@ class Cart extends CI_Controller {
 		
 		if( $this->db->delete('tb_cart', $where)){
 			redirect(base_url('cart'));
+		}
+    }
+    public function act_inv_del(){
+        //update jika ada
+        $res = $this->db->get_where('tb_d_invoice',array('invoice_id'=>$this->input->get('id')))->result();
+        foreach ($res as $data){
+            $this->tambahStock($data->produk_id,$data->satuan);
+        }
+
+		if($this->db->delete('tb_d_invoice',array('invoice_id'=>$this->input->get('id')))){
+            if( $this->db->delete('tb_invoice',array('id'=>$this->input->get('id')))){
+                redirect(base_url('cart/invoice'));
+            }
 		}
     }
 }
