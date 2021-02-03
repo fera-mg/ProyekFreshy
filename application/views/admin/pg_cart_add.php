@@ -188,14 +188,13 @@
                         <h3><?=$data->nama_produk?></h3>
                         <img src="<?= base_url('uploads/product/'.$data->gambar) ?>">
                         <h4>Harga Satuan: <?=rupiah($data->harga)?></h4>
-                        <p>Stok <?php 
-                        if($data->stok < 5){
-                          echo "< 5";
-                        } elseif ($data->stok == 0 ){
-                          echo "Habis";
-                        } else {
-                          echo  $data->stok;
-                        }?></p>
+                        <p>Stok <?php if($data->stok == 0){
+                      echo "Habis";
+                    } elseif ( $data->stok < 5 ){
+                      echo "tersisa ".$data->stok;
+                    } else {
+                      echo $data->stok;
+                    }?></p>
                         </div>
                         <div class="col-md-4 col-xs-8">
                         <form action="<?=base_url('cart/act_add')?>" method="post">

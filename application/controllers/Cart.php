@@ -165,21 +165,38 @@ class Cart extends CI_Controller {
         $insert_id = $this->db->insert_id();
         
         foreach($rescart as $data){
-            $invdetail = array(
-                'invoice_id'=> $insert_id,
-                'produk_id'=> $data->produk_id,
-                'satuan'=> $data->satuan
-            );
-            $this->db->insert('tb_d_invoice', $invdetail);
-
-            // update stok
-
+            if ($this->isProdukValid($data->produk_id,$data->satuan)){
+                $invdetail = array(
+                    'invoice_id'=> $insert_id,
+                    'produk_id'=> $data->produk_id,
+                    'satuan'=> $data->satuan
+                );
+                $this->db->insert('tb_d_invoice', $invdetail);
+                $this->updateStock($data->produk_id,$data->satuan);
+            }
         }
 
         if($this->db->delete('tb_cart', array('user_id' => $res[0]->id))){
             redirect(base_url('cart/invoice'));
         }
         // print_r($rescart);
+    }
+
+    private function isProdukValid($id, $jml){
+        $res = $this->db->get_where('tb_produk',array('id' => $id))->result();
+        return $res[0]->stok >= $jml;
+    }
+
+    private function updateStock($id, $jml){
+        $res = $this->db->get_where('tb_produk',array('id' => $id))->result();
+        $data = array(
+            'stok' => $res[0]->stok-$jml
+        );
+        $where = array(
+            'id' => $id
+        );
+        $this->db->where($where);
+        return $this->db->update('tb_produk', $data);
     }
 
     public function invoice(){
@@ -194,7 +211,6 @@ class Cart extends CI_Controller {
         $res = $this->db->get_where('tb_invoice',$where)->result();
 
         // print_r($res);
-        // die;
         $data['invoice'] = $res;
         // $data['product'] = $this->db->get_where('tb_produk',array('id'=>$res[0]->produk_id))->result();;
         $this->load->view('admin/adm_head');

@@ -40,6 +40,7 @@
                         </tr>
                         <?php 
                         $total = 0;
+                        $today = date("Y-m-d");
                         foreach($invoice as $data){
                             $resdtail = $this->db->get_where('tb_d_invoice',array('invoice_id'=>$data->id));
                             $namas = "";
@@ -54,7 +55,9 @@
                                 $namas .= ", ";
                               }
                             }
-                            // $subtotal = $res_produk[0]->harga * $data->satuan;
+                            // cek jatuh tempo
+                            $date2 = strtotime($data->tanggal. ' + 2 days');
+                            $date_diff=($date2-strtotime($today)) / 86400;
                         ?>
                         <tr>
                             <td><?= $data->id ?></td>
@@ -64,7 +67,11 @@
                             <td><?php
                             if ($data->status_bayar == 0 ){
                               if ($data->bukti == null){
-                                echo "Belum dibayar";
+                                if ($date_diff < 0){
+                                  echo "Invoice expired";
+                                } else {
+                                  echo "Belum dibayar";
+                                }
                               } else {
                                 echo "Proses Validasi Admin";
                               }
@@ -73,7 +80,20 @@
                             } elseif($data->status_bayar == 2 ) { 
                               echo "Pembayaran Tidak Valid, Silahkan Hubungi Admin!"; 
                               }?></td>
-                            <td><a href="<?= base_url('cart/inv_detail?id='.$data->id) ?>" class="btn btn-block btn-primary btn-sm">Lihat</a></td>
+                            <td>
+                            <?php
+                            if ($date_diff < 0 && $data->bukti == null){
+                            ?>
+                            <a href="<?= base_url('cart/inv_del?id='.$data->id) ?>" class="btn btn-block btn-danger btn-sm">Hapus</a>
+                            <?php
+                            } else {
+                            ?>
+                            <a href="<?= base_url('cart/inv_detail?id='.$data->id) ?>" class="btn btn-block btn-primary btn-sm">Lihat</a>
+                            <?php
+                            }
+                            ?>
+                            
+                            </td>
                         </tr>
                         <?php 
                         

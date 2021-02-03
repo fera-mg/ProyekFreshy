@@ -168,7 +168,7 @@
                     <table class="table table-hover">
                         <tbody>
                         <tr>
-                            <th>ID</th>
+                            <th>No</th>
                             <th>Nama Barang</th>
                             <th>Jumlah Satuan</th>
                             <th>Sub Total</th>
@@ -176,12 +176,13 @@
                         </tr>
                         <?php 
                         $total = 0;
+                        $no=0;
                         foreach($cart as $data){
                             $res_produk = $this->db->get_where('tb_produk',array('id'=>$data->produk_id))->result();
                             $subtotal = $res_produk[0]->harga * $data->satuan;
                         ?>
                         <tr>
-                            <td><?= $data->id ?></td>
+                            <td><?= ++$no ?></td>
                             <td><?= $res_produk[0]->nama_produk?></td>
                             <td><?= $data->satuan ?></td>
                             <td><?= rupiah($subtotal) ?></td>
