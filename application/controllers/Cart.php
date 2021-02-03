@@ -69,11 +69,11 @@ class Cart extends CI_Controller {
             $where = array(
                 'id' => $this->input->get('id')
             );
-            $data['produk'] = $this->db->get_where('tb_produk',$where)->result();
+            $data['product'] = $this->db->get_where('tb_produk',$where)->result();
             $this->load->view('admin/adm_head');
             $this->load->view('admin/adm_nav',$data);
             $this->load->view('admin/pg_cart_add',$data);
-            $this->load->view('admin/adm_footer');
+            $this->load->view('admin/adm_footer',$data);
         }
     }
 
@@ -112,7 +112,7 @@ class Cart extends CI_Controller {
             $this->load->view('admin/adm_head');
             $this->load->view('admin/adm_nav',$data);
             $this->load->view('admin/pg_cart_edit',$data);
-            $this->load->view('admin/adm_footer');
+            $this->load->view('admin/adm_footer',$data);
     }
 
     public function act_edit(){
@@ -173,7 +173,7 @@ class Cart extends CI_Controller {
             $this->db->insert('tb_d_invoice', $invdetail);
 
             // update stok
-            
+
         }
 
         if($this->db->delete('tb_cart', array('user_id' => $res[0]->id))){

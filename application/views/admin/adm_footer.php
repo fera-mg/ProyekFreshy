@@ -51,18 +51,35 @@
     
     
     <script>
+
+    <?php if ($page == 'invoice'){?>
       var element = document.getElementById('tsprint');
       var btninvgen = document.getElementById('btngenpdfinv');
       btninvgen.onclick = function(){
         html2pdf(element);
       }
 
+      <?php }?>
+
       var btnplus = document.getElementById("button-add1");
       var btnminus = document.getElementById("button-add2");
       var inpsatuanbarang = document.getElementById("id_set_val_satuan");
 
+      var max = <?php 
+      if (isset($product)){
+        foreach ($product as $data){
+          echo $data->stok;
+        }
+      } else {
+        echo 0;
+      }
+      ?>;
+
       btnplus.onclick = function() {
         inpsatuanbarang.value = parseInt(inpsatuanbarang.value) + 1;
+        if (parseInt(inpsatuanbarang.value) >= max){
+          inpsatuanbarang.value = max;
+        }
       }
       btnminus.onclick = function() {
         if(parseInt(inpsatuanbarang.value) <= 1){
@@ -75,6 +92,9 @@
       inpsatuanbarang.onchange = function() {
         if(parseInt(inpsatuanbarang.value) == ""){
           inpsatuanbarang.value = 1;
+        }
+        if (parseInt(inpsatuanbarang.value) >= max){
+          inpsatuanbarang.value = max;
         }
       }
     </script>

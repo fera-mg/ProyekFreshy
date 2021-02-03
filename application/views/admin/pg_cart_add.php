@@ -174,7 +174,8 @@
              
             }
             
-            foreach ($produk as $data) {?>
+            foreach ($product as $data) {
+              ?>
               <!-- Item -->
               <div class="col-md-12">
                 <div class="box box-solid">
@@ -187,7 +188,8 @@
                         <h3><?=$data->nama_produk?></h3>
                         <img src="<?= base_url('uploads/product/'.$data->gambar) ?>">
                         <h4>Harga Satuan: <?=rupiah($data->harga)?></h4>
-                        <p>Stok <?php if($data->stok < 5){
+                        <p>Stok <?php 
+                        if($data->stok < 5){
                           echo "< 5";
                         } elseif ($data->stok == 0 ){
                           echo "Habis";
