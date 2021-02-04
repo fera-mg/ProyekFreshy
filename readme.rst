@@ -5,5 +5,5 @@ PROYEK FRESHY
 Aplikasi FRESHY merupakan aplikasi penjualan bunga secara Online
 
 *******************
-FERA MEGA HARISTINA - PLJTIF 2019
+FERA MEGA HARISTINA - PLJTIF 2020
 *******************
